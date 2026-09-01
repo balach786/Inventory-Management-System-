@@ -349,7 +349,16 @@ const localRepo = new LocalRepository();
 const api = {
   // Config & Status Helpers
   getApiUrl: () => {
-    return localStorage.getItem(STORAGE_KEYS.API_URL) || (typeof process !== 'undefined' && process.env?.REACT_APP_API_BASE_URL) || '';
+    const envUrl = 
+      (typeof import.meta !== 'undefined' && import.meta.env && (
+        import.meta.env.VITE_API_URL || 
+        import.meta.env.VITE_APP_URL || 
+        import.meta.env.APP_URL || 
+        import.meta.env.REACT_APP_API_BASE_URL
+      )) || 
+      (typeof process !== 'undefined' && process.env?.REACT_APP_API_BASE_URL) || 
+      '';
+    return localStorage.getItem(STORAGE_KEYS.API_URL) || envUrl || '';
   },
 
   setApiUrl: (url) => {
